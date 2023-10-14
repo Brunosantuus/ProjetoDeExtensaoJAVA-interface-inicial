@@ -10,6 +10,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -37,10 +44,10 @@ public class TelaDeLogin extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        usuario = new javax.swing.JTextField();
+        botao_entra = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        senhalogin = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -65,24 +72,24 @@ public class TelaDeLogin extends javax.swing.JFrame {
         getContentPane().add(jLabel2);
         jLabel2.setBounds(640, 240, 70, 40);
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                usuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField3);
-        jTextField3.setBounds(640, 190, 250, 30);
+        getContentPane().add(usuario);
+        usuario.setBounds(640, 190, 250, 30);
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(51, 204, 0));
-        jButton1.setText("Entrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botao_entra.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        botao_entra.setForeground(new java.awt.Color(51, 204, 0));
+        botao_entra.setText("Entrar");
+        botao_entra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botao_entraActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(680, 400, 170, 42);
+        getContentPane().add(botao_entra);
+        botao_entra.setBounds(680, 400, 170, 42);
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("Registrar-se");
@@ -93,8 +100,8 @@ public class TelaDeLogin extends javax.swing.JFrame {
         });
         getContentPane().add(jButton2);
         jButton2.setBounds(680, 450, 170, 44);
-        getContentPane().add(jPasswordField1);
-        jPasswordField1.setBounds(640, 280, 250, 30);
+        getContentPane().add(senhalogin);
+        senhalogin.setBounds(640, 280, 250, 30);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/folder/newpackage/Prancheta 4logo.png"))); // NOI18N
         getContentPane().add(jLabel3);
@@ -119,50 +126,59 @@ public class TelaDeLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_usuarioActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botao_entraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_entraActionPerformed
+        
+        String Loginvar, Senhavar, query, senhaDb = null;
+        String SUrl, SUser, Spass;
+        SUrl = "jdbc:mysql://localhost:3306/bibliotecamero";
+        SUser = "root";
+        Spass = "";
+        int notFound = 0;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(SUrl, SUser, Spass);
+            Statement st = con.createStatement();
+            if("".equals(usuario.getText())){
+                JOptionPane.showMessageDialog(new JFrame(), "Digite seu Login", "Error", JOptionPane.ERROR_MESSAGE);
+            }else if("".equals(senhalogin.getText())){
+                JOptionPane.showMessageDialog(new JFrame(), "Digite sua senha", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                Loginvar = usuario.getText();
+                Senhavar = senhalogin.getText();
+                System.out.println(Senhavar);
+                
+                query = "SELECT * FROM user WHERE email='"+Loginvar+"'";
+                ResultSet rs = st.executeQuery(query);
+                while(rs.next()){
+                    senhaDb = rs.getString("senha");
+                    notFound = 1;
+                }
+                if(notFound == 1 && Senhavar.equals(senhaDb)){
+                        System.out.println("OKAY");
+                        
+                }else{
+                    JOptionPane.showMessageDialog(new JFrame(), "Usuario ou Senha Incorretos! ", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                st.execute(query);
+                usuario.setText("");
+                senhalogin.setText("");
+                showMessageDialog(null, "Conta Criada Com Sucesso!! ");
+                
+                        
+            }
+            
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
+        }
         this.dispose();
         PaginaInicial formulario = new PaginaInicial();
         formulario.setVisible(true);
-        /*
-        formulario.setSize(622, 427);
-        formulario.setLocationRelativeTo(null);
-        formulario.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*
-        formulario.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-        JLabel titulo = new JLabel("Bem vindo!");
-        
-        SwingUtilities.invokeLater(() -> {
-        
-            JPanel superior = new JPanel();
-            JPanel inferior = new JPanel();
-            JPanel meio = new JPanel();
-            
-            JTextField barraPesquisa = new JTextField(20);
-            
-            JButton button = new JButton("Registro de Denúncias");
-            
-            superior.add(titulo);
-            meio.add(barraPesquisa);
-            inferior.add(button);
-            
-            formulario.getContentPane().add(meio);
-            formulario.getContentPane().add(superior);
-            formulario.getContentPane().add(inferior);
-            
-            JPanel containerPanel = new JPanel();
-            containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
-            containerPanel.add(superior);
-            containerPanel.add(meio);
-            containerPanel.add(inferior);
-            
-            formulario.add(containerPanel);
-        });*/
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botao_entraActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
@@ -207,7 +223,7 @@ public class TelaDeLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton botao_entra;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -215,7 +231,7 @@ public class TelaDeLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JPasswordField senhalogin;
+    private javax.swing.JTextField usuario;
     // End of variables declaration//GEN-END:variables
 }
