@@ -14,6 +14,7 @@ public class Registro extends javax.swing.JFrame {
    
     public Registro() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -57,9 +58,11 @@ public class Registro extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cadastro");
         setMaximumSize(new java.awt.Dimension(960, 551));
+        setPreferredSize(new java.awt.Dimension(960, 551));
+        setResizable(false);
         getContentPane().setLayout(null);
 
-        botao_confirmar.setBackground(new java.awt.Color(255, 204, 102));
+        botao_confirmar.setBackground(new java.awt.Color(204, 153, 0));
         botao_confirmar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         botao_confirmar.setForeground(new java.awt.Color(255, 255, 255));
         botao_confirmar.setText("Confirmar");

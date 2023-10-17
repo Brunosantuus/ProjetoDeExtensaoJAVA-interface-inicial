@@ -31,6 +31,7 @@ public class TelaDeLogin extends javax.swing.JFrame {
     
     public TelaDeLogin() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -132,7 +133,7 @@ public class TelaDeLogin extends javax.swing.JFrame {
 
     private void botao_entraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_entraActionPerformed
         
-        String Loginvar, Senhavar, query, senhaDb = null;
+        String Login, Senha, query, senhaDb = null;
         String SUrl, SUser, Spass;
         SUrl = "jdbc:mysql://localhost:3306/bibliotecamero";
         SUser = "root";
@@ -147,26 +148,34 @@ public class TelaDeLogin extends javax.swing.JFrame {
             }else if("".equals(senhalogin.getText())){
                 JOptionPane.showMessageDialog(new JFrame(), "Digite sua senha", "Error", JOptionPane.ERROR_MESSAGE);
             }else{
-                Loginvar = usuario.getText();
-                Senhavar = senhalogin.getText();
-                System.out.println(Senhavar);
+            Login = usuario.getText();
+            Senha = senhalogin.getText();
+            //System.out.println(Senha); 
                 
-                query = "SELECT * FROM user WHERE email='"+Loginvar+"'";
-                ResultSet rs = st.executeQuery(query);
-                while(rs.next()){
-                    senhaDb = rs.getString("senha");
-                    notFound = 1;
-                }
-                if(notFound == 1 && Senhavar.equals(senhaDb)){
-                        System.out.println("OKAY");
-                        
-                }else{
-                    JOptionPane.showMessageDialog(new JFrame(), "Usuario ou Senha Incorretos! ", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            query = "SELECT * FROM user WHERE login='"+Login+"'";
+            
+            ResultSet rs = st.executeQuery(query);
+            while(rs.next()){
+                senhaDb = rs.getString("senha");
+                notFound = 1;
+            }
+            if(notFound == 1 && Senha.equals(senhaDb)){
+                showMessageDialog(null, "Login Com Sucesso!! ");
+                this.dispose();
+                PaginaInicial formulario = new PaginaInicial();
+                formulario.setVisible(true);
+                //JOptionPane.showMessageDialog(new JFrame(), "Usuario ou Senha Incorretos! ", "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                System.out.println(Senha); 
+                JOptionPane.showMessageDialog(new JFrame(), "Usuario ou Senha Incorretos! ", "Error", JOptionPane.ERROR_MESSAGE);
+                //this.dispose();
+                //PaginaInicial formulario = new PaginaInicial();
+                //formulario.setVisible(true);
+            }
                 st.execute(query);
                 usuario.setText("");
                 senhalogin.setText("");
-                showMessageDialog(null, "Conta Criada Com Sucesso!! ");
+                //showMessageDialog(null, "Login Com Sucesso!! ");
                 
                         
             }
@@ -174,9 +183,9 @@ public class TelaDeLogin extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("Error" + e.getMessage());
         }
-        this.dispose();
-        PaginaInicial formulario = new PaginaInicial();
-        formulario.setVisible(true);
+        //this.dispose();
+        //PaginaInicial formulario = new PaginaInicial();
+        //formulario.setVisible(true);
         
     }//GEN-LAST:event_botao_entraActionPerformed
 
